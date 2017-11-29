@@ -18,6 +18,8 @@ import static android.widget.Toast.LENGTH_SHORT;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private Game_controller controller = new Game_controller();
+
     private int      choixPlayer;
     private int      nbManche;
     private int      scorePlayer;
@@ -66,29 +68,22 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             // player vs computer
             case 0:
                 player_name.setText("player");
-
-                    choice_ciseaux.setOnClickListener(this);
-                    choice_pierre.setOnClickListener(this);
-                    choice_papier.setOnClickListener(this);
-
+                choice_ciseaux.setOnClickListener(this);
+                choice_pierre.setOnClickListener(this);
+                choice_papier.setOnClickListener(this);
                 break;
 
             // computer vs computer
             case 1:
                 player_name.setText("ordinateur");
-
                 break;
 
             default:
-
         }
-
-
     }
 
     @Override
     public void onClick(View view) {
-
         int scoreTempPlayer   = scorePlayer;
         int scoreTempComputer = scoreComputer;
         int temp = -1;
@@ -100,58 +95,36 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     player_choice.setText(choice_pierre.getText());
 
                     // affichage du choix du pc
-                    temp = ChoiceComputer();
+                    temp = controller.ChoiceComputer();
                     setChoiceComputer(temp);
 
                     // affichage du resultat
-                    String result = compare(0, temp);
+                    String result = controller.compare(0, temp);
                     resultat(result, scoreTempPlayer,scoreTempComputer);
-
                     break;
 
                 case R.id.choice_ciseaux :
                     player_choice.setText(choice_ciseaux.getText());
 
                     // affichage du choix du pc
-                    temp = ChoiceComputer();
+                    temp = controller.ChoiceComputer();
                     setChoiceComputer(temp);
 
-                    result = compare(1, temp);
+                    result = controller.compare(1, temp);
                     resultat(result, scoreTempPlayer,scoreTempComputer);
-
                     break;
 
                 case R.id.choice_papier :
                     player_choice.setText(choice_papier.getText());
 
                     // affichage du choix du pc
-                    temp = ChoiceComputer();
+                    temp = controller.ChoiceComputer();
                     setChoiceComputer(temp);
 
-                    result = compare(2, temp);
+                    result = controller.compare(2, temp);
                     resultat(result, scoreTempPlayer,scoreTempComputer);
-
                     break;
             }
-    }
-
-    // renvois le choix de l'ordinateur
-    public int ChoiceComputer(){
-        return (int)(Math.random()*3);
-    }
-
-    // fonction qui compare le résultat
-    public String compare(int i, int j){
-        if (i == j){
-            return "égalité";
-        }
-        int ij = Integer.valueOf(i + "" + j);
-
-        if(ij == 1 || ij == 12 || ij == 20){
-            return "gagné";
-        }else {
-            return "perdu";
-        }
     }
 
     private void setChoiceComputer(int i){
@@ -170,7 +143,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void resultat(String result, int scoreTempPlayer, int scoreTempComputer){
+    public void resultat(String result, int scoreTempPlayer, int scoreTempComputer){
         if ( result == "gagné"){
             scorePlayer = scoreTempPlayer + 1;
             player_score.setText(String.valueOf(scorePlayer));
@@ -184,16 +157,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             Toast toast = Toast.makeText(this, result, LENGTH_SHORT);
             toast.show();
         }
-
         endSession();
     }
 
     private void endSession(){
-
-        Log.e("scorePlayer : ", String.valueOf(scorePlayer));
-        Log.e("scoreComputer : ", String.valueOf(scoreComputer));
-        Log.e("nbManche : ", String.valueOf(nbManche));
-
         if (scorePlayer == nbManche || scoreComputer == nbManche){
             if (scorePlayer > scoreComputer){
                 String verdict = " Bravo tu as gagné !!";
@@ -212,10 +179,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     GameActivity.this.finish();
                 }
             }, 3500);
-
-
         }
     }
-
-
 }
